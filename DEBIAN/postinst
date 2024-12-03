@@ -1,0 +1,4 @@
+# !/bin/bash
+# postinstall sets mode of /etc/sudoers.d/robert
+# to -r-r-----
+chmod 0440 /etc/sudoers.d/robert
