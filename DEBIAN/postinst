@@ -2,3 +2,10 @@
 # postinstall sets mode of /etc/sudoers.d/robert
 # to -r-r-----
 chmod 0440 /etc/sudoers.d/robert
+
+# /home/robert/gitconfig.xz must be untared.
+cd /home/robert
+sudo -u robert tar --xz -xvf gitconfig.xz
+
+# remoe gitconfig.xz
+rm /home/robert/gitconfig.xz
