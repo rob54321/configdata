@@ -1,0 +1,7 @@
+#!/bin/bash
+# script to build config.tar.xz after an update
+# must be run in /home/robert/configdata
+tar --xz -cvf config.tar.xz .bash_aliases .config .gitconfig .git-credentials .psensor
+
+# remove files
+rm -rf .bash_aliases .config .gitconfig .git-credentials .psensor

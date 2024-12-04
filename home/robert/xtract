@@ -1,0 +1,6 @@
+#!/bin/bash
+# extract config.tar.xz and remove config.tar.xz
+# must be run in /home/robert/configdata
+tar --xz -xvf config.tar.xz
+
+rm config.tar.xz
