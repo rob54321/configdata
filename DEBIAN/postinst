@@ -14,3 +14,7 @@ sudo -u robert tar --xz -xvf config.tar.xz
 
 # remove config.tar.xz
 rm /home/robert/config.tar.xz
+
+# rem build and xtract
+rm /home/robert/build
+rm /home/robert/xtract
