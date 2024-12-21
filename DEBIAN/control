@@ -1,7 +1,6 @@
 Package: configdata
 Version: 1.0.9
 Architecture: amd64
-Dedepends: xz-utils
 Maintainer: Robert Key robertkey021@gmail.com
 Section: myown
 Priority: optional

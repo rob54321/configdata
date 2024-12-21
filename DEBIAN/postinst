@@ -1,5 +1,11 @@
 # !/bin/bash
-# postinstall sets mode of /etc/sudoers.d/robert
+# 
+# xz-utils is required for untarring
+# this package is installed with dpkg -i configdata
+#pre-depends xz-utils does not work
+apt install xz-utils -y
+
+postinstall sets mode of /etc/sudoers.d/robert
 # to -r-r-----
 chmod 0440 /etc/sudoers.d/robert
 chown root:root /etc/sudoers.d/robert
