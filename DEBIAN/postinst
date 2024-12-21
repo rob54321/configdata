@@ -3,7 +3,7 @@
 # xz-utils is required for untarring
 # this package is installed with dpkg -i configdata
 #pre-depends xz-utils does not work
-apt install xz-utils -y
+# apt install also does not work here
 
 postinstall sets mode of /etc/sudoers.d/robert
 # to -r-r-----
