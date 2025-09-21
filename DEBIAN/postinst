@@ -1,5 +1,5 @@
-# !/bin/bash
-# 
+#!/bin/sh
+#
 # xz-utils is required for untarring
 # this package is installed with dpkg -i configdata
 #pre-depends xz-utils does not work
