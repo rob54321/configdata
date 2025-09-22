@@ -1,7 +1,10 @@
 #!/bin/bash
 # the grub backup file must be restored
 
-# for testing
+# postrm runs twice when apt --purge autoremove confidata is run
+# in the first run grub.bak exists
+# in the second run grub.bak does not exist
+# it was moved to grub in the first run
 if test -f "/etc/default/grub.bak" ; then
 	echo "/etc/default/grub.bak exists";
 	mv -fv "/etc/default/grub.bak" "/etc/default/grub"
