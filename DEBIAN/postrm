@@ -6,8 +6,8 @@
 # in the second run grub.bak does not exist
 # it was moved to grub in the first run
 if test -f "/etc/default/grub.bak" ; then
-	echo "/etc/default/grub.bak exists";
+	echo "configdata:postrm /etc/default/grub.bak exists";
 	mv -fv "/etc/default/grub.bak" "/etc/default/grub"
 else
-	echo "/etc/default/grub.bak does not exist";
+	echo "configdata:postrm /etc/default/grub.bak does not exist";
 fi
