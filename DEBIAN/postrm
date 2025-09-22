@@ -1,3 +1,10 @@
 #!/bin/bash
 # the grub backup file must be restored
-test -f "/etc/default/grub.bak" && mv -vf /etc/default/grub.bak /etc/default/grub
+# test -f "/etc/default/grub.bak" && mv -vf /etc/default/grub.bak /etc/default/grub
+
+# for testing
+if test -f "/etc/default/grub.bak" ; then
+	echo "/etc/default/grub.bak exists";
+elif
+	echo "/etc/default/grub.bak does not exist";
+fi
