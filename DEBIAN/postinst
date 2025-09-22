@@ -33,6 +33,11 @@ if test -f "/etc/default/grub.bak"; then
 	echo "configdata:postinst /etc/default/grub.bak does exist";
 else
 	echo "configdata:postinst /etc/default/grub.bak does not exist";
-	mv -fv /etc/default/grub /etc/default/grub.bak
+	if test -f "/etc/default/grub"; then
+		echo "configdata:postinst /etc/default/grub does exist"
+		mv -fv /etc/default/grub /etc/default/grub.bak
+	else
+		echo "configdata:postinst /etc/default/grub does not exist"
+	fi
 fi
 cp -v /tmp/grub /etc/default/grub
