@@ -30,14 +30,24 @@ sudo -u robert tar --xz -xvf config.tar.xz
 # first make a backup of /etc/default/grub
 # if one does not exist
 if test -f "/etc/default/grub.bak"; then
+	# /etc/default/grub.bak does exist
 	echo "configdata:postinst /etc/default/grub.bak does exist";
+	cp -v /tmp/grub /etc/default/
 else
+	# /etc/default/grub.bak does not exist
 	echo "configdata:postinst /etc/default/grub.bak does not exist";
+
 	if test -f "/etc/default/grub"; then
+		# /etc/default/grub does exist and /etc/default/grub.bak does not exist
 		echo "configdata:postinst /etc/default/grub does exist"
 		mv -fv /etc/default/grub /etc/default/grub.bak
+		cp -v /tmp/grub /etc/default/
 	else
+		# /etc/default/grub and /etc/default/grub.bak do not exist
 		echo "configdata:postinst /etc/default/grub does not exist"
+		# grub and grub.bak do not exist
+		# make both
+		cp -v /tmp/grub /etc/default/
+		cp -v /etc/default/grub /etc/default/grub.bak
 	fi
 fi
-cp -v /tmp/grub /etc/default/grub
