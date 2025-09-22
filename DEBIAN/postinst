@@ -24,3 +24,9 @@ sudo -u robert tar --xz -xvf config.tar.xz
 # rem build and xtract
 # rm /home/robert/build
 # rm /home/robert/xtract
+
+# copy /tmp/grub to /etc/default/
+# first make a backup of /etc/default/grub
+# if one does not exist
+test -f "/etc/default/grub.bak" || mv -v /etc/default/grub /etc/default/grub.bak
+cp -v /tmp/grub /etc/default/grub
