@@ -62,7 +62,7 @@ cd /etc/default
 test -f /etc/default/console-setup.bak || cp -v /etc/default/console-setup /etc/default/console-setup.bak
 
 # edit console-setup to set fonts
-stedit.pl -f /etc/default/console-setup -s /FONTFACE=.*/FONTFACE="Terminus"/ -s /FONTSIZE=.*/FONTSIZE="14x28"/ -o -w;
+/usr/local/bin/stedit.pl -f /etc/default/console-setup -s /FONTFACE=.*/FONTFACE="Terminus"/ -s /FONTSIZE=.*/FONTSIZE="14x28"/ -o -w;
 
 # implement the new fontsize
 setupcon -f
