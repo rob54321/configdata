@@ -1,4 +1,8 @@
 #!/bin/bash
+################################################
+# configdata:postrm
+################################################
+
 # the grub backup file must be restored
 
 # postrm runs twice when apt --purge autoremove confidata is run
@@ -11,3 +15,18 @@ if test -f "/etc/default/grub.bak" ; then
 else
 	echo "configdata:postrm /etc/default/grub.bak does not exist";
 fi
+
+# console-setup is restored from the backup console-setup.bak
+# if the backup exists, restore it
+test -f "/etc/default/console-setup.bak" && cp -fv /etc/default/console-setup.bak /etc/default/console-setup
+
+# restore console
+setupcon -f
+setupcon --save
+
+# update-grub must not be run in the live system or in the chroot environment
+# if init-linux is run on the live desktop then update-grub
+# must be prevented from running
+# this section of code only runs on a desktop , not the livesystem
+
+test `hostname` = "live" || update-grub
