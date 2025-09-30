@@ -3,8 +3,12 @@
 # configdata:postrm
 ################################################
 
-# the grub backup file must be restored
+# called with parameters remove or purge.
+# only execute this script for removal
+# when a purge is done, called with remove then with purge
+test "$1" == "remove" || exit 0;
 
+# the grub backup file must be restored
 # postrm runs twice when apt --purge autoremove confidata is run
 # in the first run grub.bak exists
 # in the second run grub.bak does not exist
