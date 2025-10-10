@@ -17,13 +17,16 @@ test "$1" = "configure" || exit 0;
 chmod 0440 /etc/sudoers.d/robert
 chown root:root /etc/sudoers.d/robert
 
+# the xorg user config ~/.config/dconf/user
+# should be deleted it it exists.
+
 # /home/robert/config.tar.xz is archived because
 # some of the config files contain tokens for a login.
 # github detects these tokens and disables them.
 # the archive hides these tokens.
 # /home/robert/config.tar.xz must be extracted
 cd /home/robert
-sudo -u robert tar --xz -xvf config.tar.xz
+sudo -u robert tar --overwrite --xz -xvf config.tar.xz
 
 
 # remove config.tar.xz
