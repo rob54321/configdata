@@ -30,11 +30,11 @@ sudo -u robert tar --overwrite --xz -xvf config.tar.xz
 
 
 # remove config.tar.xz
-# rm /home/robert/config.tar.xz
+rm -vf /home/robert/config.tar.xz
 
 # rem build and xtract
-# rm /home/robert/build
-# rm /home/robert/xtract
+rm -vf /home/robert/build
+rm -vf /home/robert/xtract
 
 # copy /tmp/grub to /etc/default/
 # first make a backup of /etc/default/grub
