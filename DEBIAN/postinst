@@ -36,10 +36,11 @@ rm -vf /home/robert/config.tar.xz
 rm -vf /home/robert/build
 rm -vf /home/robert/xtract
 
+# update grub is not for a chroot environment
 # copy /tmp/grub to /etc/default/
 # first make a backup of /etc/default/grub
 # if one does not exist
-if test -f "/etc/default/grub.bak"; then
+if test -f "/etc/default/grub.bak" && test ! -d "/chrootenvironment"; then
 	# /etc/default/grub.bak does exist
 	echo "configdata:postinst /etc/default/grub.bak does exist";
 	cp -v /tmp/grub /etc/default/
@@ -80,4 +81,6 @@ setupcon --save
 # must be prevented from running
 # this section of code only runs on a desktop , not the livesystem
 
-test `hostname` = "live" || update-grub
+if test `hostname` != "live" && test ! -d "/chrootenvironment"; then
+	update-grub
+fi

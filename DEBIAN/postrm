@@ -33,4 +33,6 @@ setupcon --save
 # must be prevented from running
 # this section of code only runs on a desktop , not the livesystem
 
-test `hostname` = "live" || update-grub
+if test `hostname` != "live" && test ! -d "/chrootenvironment"; then
+	update-grub
+fi
