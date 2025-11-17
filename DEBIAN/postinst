@@ -83,5 +83,8 @@ setupcon --save
 
 if test `hostname` != "live" && test ! -d "/chrootenvironment"; then
 	# check if grub2-common is installed
-	test `dpkg-query -s grub2-common > /dev/null 2>&1` && update-grub
+	dpkg-query -s grub2-common > /dev/null 2>&1 && update-grub
 fi
+# in case grub2-common was not installed
+exit 0
+
