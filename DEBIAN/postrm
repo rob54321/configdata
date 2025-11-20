@@ -28,11 +28,15 @@ test -f "/etc/default/console-setup.bak" && cp -fv /etc/default/console-setup.ba
 setupcon -f
 setupcon --save
 
+
 # update-grub must not be run in the live system or in the chroot environment
 # if init-linux is run on the live desktop then update-grub
 # must be prevented from running
 # this section of code only runs on a desktop , not the livesystem
 
 if test `hostname` != "live" && test ! -d "/chrootenvironment"; then
-	update-grub
+	# check if grub2-common is installed
+	dpkg-query -s grub2-common > /dev/null 2>&1 && update-grub
 fi
+# in case grub2-common was not installed
+exit 0
