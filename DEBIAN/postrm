@@ -39,4 +39,8 @@ if test `hostname` != "live" && test ! -d "/chrootenvironment"; then
 	dpkg-query -s grub2-common > /dev/null 2>&1 && update-grub
 fi
 # in case grub2-common was not installed
+
+# remove config data for geany
+cd /home/robert
+rm -rf .config/geany
 exit 0
