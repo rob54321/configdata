@@ -1,10 +1,10 @@
 Package: configdata
-Version: 1.4.1
+Version: 1.4.2
 Architecture: amd64
 Maintainer: Robert Key robertkey021@gmail.com
 Section: myown
-Pre-depends: stedit, geany, geany-plugins, geany-common
-Depends: xz-utils
+Pre-depends: stedit
+Depends: xz-utils, geany, geany-common, geany-plugins, rclone, git, git-man, subversion, gh, builddebiantree, mtools, dosfstools
 Priority: optional
-Description: All config data for user and system and geany is installed
+Description: All config data and geany, rclone, git, subversion, gh and builddebiantree are installed
 
