@@ -42,5 +42,5 @@ fi
 
 # remove config data for geany
 cd /home/robert
-rm -rf .config/ubuntu-mate .config/geany .config/dconf .config/gh .config/rclone .gitconfig .git-credentials .psensor
+rm -rf .config/ubuntu-mate .config/mate .config/geany .config/dconf .config/gh .config/rclone .gitconfig .git-credentials .psensor
 exit 0
