@@ -72,7 +72,6 @@ sed -i -e 's/^# set autoindent/set autoindent/' \
 	   -e 's/^# set selectedcolor lightwhite,magenta/set selectedcolor lightwhite,magenta/' \
 	   -e 's/^# set numbercolor cyan/set numbercolor cyan/' \
 	   -e 's/^# set keycolor cyan/set keycolor cyan/' /etc/nanorc
-log "setup account colours"
 
 
 # setup default console with Terminus
