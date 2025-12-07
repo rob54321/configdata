@@ -1,10 +1,10 @@
 Package: configdata
-Version: 1.4.7
+Version: 1.4.8
 Architecture: amd64
 Maintainer: Robert Key robertkey021@gmail.com
 Section: myown
 Pre-depends: stedit
-Depends: xz-utils, geany, geany-common, geany-plugins, rclone, git, git-man, subversion, gh, builddebiantree, mtools, dosfstools, ubuntu-mate-wallpapers-complete, lomiri-wallpapers
+Depends: xz-utils, nano, geany, geany-common, geany-plugins, rclone, git, git-man, subversion, gh, builddebiantree, mtools, dosfstools, ubuntu-mate-wallpapers-complete, lomiri-wallpapers
 Priority: optional
 Description: All config data and geany, rclone, git, subversion, gh, ubuntu-mate-wallpapers-complete and builddebiantree are installed
 
