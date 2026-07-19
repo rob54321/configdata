@@ -3,19 +3,21 @@
 # configdata:postinst
 ##################################################
 
-# this script only runs during configure.
-# if $1 is not equal to configure, exit
-test "$1" = "configure" || exit 0;
+# postinstall sets mode of /etc/sudoers.d/robert
+# to -r-r-----. This must be done for install/upgrade
+chmod 0440 /etc/sudoers.d/robert
+chown root:root /etc/sudoers.d/robert
+
+# this script runs for install, not upgrade
+# get the status from /tmp/configdatarpi-status
+# which was written by preinst
+STATUS=`cat /tmp/configdata-status`
+test "${STATUS}" = "install" || exit 0;
 
 # xz-utils is required for untarring
 # this package is installed with dpkg -i configdata
 #pre-depends xz-utils does not work
 # apt install also does not work here
-
-# postinstall sets mode of /etc/sudoers.d/robert
-# to -r-r-----
-chmod 0440 /etc/sudoers.d/robert
-chown root:root /etc/sudoers.d/robert
 
 # the xorg user config ~/.config/dconf/user
 # should be deleted it it exists.
@@ -81,7 +83,8 @@ cd /etc/default
 test -f /etc/default/console-setup.bak || cp -v /etc/default/console-setup /etc/default/console-setup.bak
 
 # edit console-setup to set fonts
-/usr/local/bin/stedit.pl -f /etc/default/console-setup -s /FONTFACE=.*/FONTFACE="Terminus"/ -s /FONTSIZE=.*/FONTSIZE="14x28"/ -o -w;
+#/usr/local/bin/stedit.pl -f /etc/default/console-setup -s /FONTFACE=.*/FONTFACE="Terminus"/ -s /FONTSIZE=.*/FONTSIZE="14x28"/ -o -w;
+/usr/bin/sed  -i -e 's/FONTFACE=.*/FONTFACE="Terminus"/' -e ' s/FONTSIZE=.*/FONTSIZE="14x28"/' /etc/default/console-setup
 
 # implement the new fontsize
 setupcon -f
