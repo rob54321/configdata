@@ -12,24 +12,123 @@ chown root:root /etc/sudoers.d/robert
 # get the status from /tmp/configdatarpi-status
 # which was written by preinst
 STATUS=`cat /tmp/configdata-status`
-test "${STATUS}" = "install" || exit 0;
+if test "${STATUS}" = "install"; then
 
-# xz-utils is required for untarring
-# this package is installed with dpkg -i configdata
-#pre-depends xz-utils does not work
-# apt install also does not work here
+	# xz-utils is required for untarring
+	# this package is installed with dpkg -i configdata
+	#pre-depends xz-utils does not work
+	# apt install also does not work here
 
-# the xorg user config ~/.config/dconf/user
-# should be deleted it it exists.
+	# the xorg user config ~/.config/dconf/user
+	# should be deleted it it exists.
 
-# /home/robert/config.tar.xz is archived because
-# some of the config files contain tokens for a login.
-# github detects these tokens and disables them.
-# the archive hides these tokens.
-# /home/robert/config.tar.xz must be extracted
-cd /home/robert
-sudo -u robert tar --overwrite --xz -xvf config.tar.xz
+	# this code is run for install
+	# /home/robert/config.tar.xz is archived because
+	# some of the config files contain tokens for a login.
+	# github detects these tokens and disables them.
+	# the archive hides these tokens.
+	# /home/robert/config.tar.xz must be extracted
+	# prompt for overwrite of config.tar.xz
+	cd /home/robert
+	sudo -u robert tar --overwrite --xz -xvf config.tar.xz
 
+	# update grub is not for a chroot environment
+	# copy /tmp/grub to /etc/default/
+	# first make a backup of /etc/default/grub
+	# if one does not exist
+	if test -f "/etc/default/grub.bak" && test ! -d "/chrootenvironment"; then
+		# /etc/default/grub.bak does exist
+		echo "configdata:postinst /etc/default/grub.bak does exist";
+		cp -v /tmp/grub /etc/default/
+	else
+		# /etc/default/grub.bak does not exist
+		echo "configdata:postinst /etc/default/grub.bak does not exist";
+
+		if test -f "/etc/default/grub"; then
+			# /etc/default/grub does exist and /etc/default/grub.bak does not exist
+			echo "configdata:postinst /etc/default/grub does exist"
+			mv -fv /etc/default/grub /etc/default/grub.bak
+			cp -v /tmp/grub /etc/default/
+		else
+			# /etc/default/grub and /etc/default/grub.bak do not exist
+			echo "configdata:postinst /etc/default/grub does not exist"
+			# grub and grub.bak do not exist
+			# make both
+			cp -v /tmp/grub /etc/default/
+			cp -v /etc/default/grub /etc/default/grub.bak
+		fi
+	fi
+
+	# edit nanorc
+	sed -i -e 's/^# set autoindent/set autoindent/' \
+		   -e 's/^# set linenumbers/set linenumbers/' \
+		   -e 's/^# set smooth/set smooth/' \
+		   -e 's/^# set multibuffer/set multibuffer/' \
+		   -e 's/^# set positionlog/set positionlog/' \
+		   -e 's/^# set selectedcolor lightwhite,magenta/set selectedcolor lightwhite,magenta/' \
+		   -e 's/^# set numbercolor cyan/set numbercolor cyan/' \
+		   -e 's/^# set keycolor cyan/set keycolor cyan/' /etc/nanorc
+
+
+	# setup default console with Terminus
+	cd /etc/default
+	# make a backup if it does not exist
+
+	test -f /etc/default/console-setup.bak || cp -v /etc/default/console-setup /etc/default/console-setup.bak
+
+	# edit console-setup to set fonts
+	#/usr/local/bin/stedit.pl -f /etc/default/console-setup -s /FONTFACE=.*/FONTFACE="Terminus"/ -s /FONTSIZE=.*/FONTSIZE="14x28"/ -o -w;
+	/usr/bin/sed  -i -e 's/FONTFACE=.*/FONTFACE="Terminus"/' -e ' s/FONTSIZE=.*/FONTSIZE="14x28"/' /etc/default/console-setup
+
+	# implement the new fontsize
+	setupcon -f
+	setupcon --save
+
+	# update-grub must not be run in the live system or in the chroot environment
+	# if init-linux is run on the live desktop then update-grub
+	# must be prevented from running
+	# this section of code only runs on a desktop , not the livesystem
+
+	if test `hostname` != "live" && test ! -d "/chrootenvironment"; then
+		# check if grub2-common is installed
+		dpkg-query -s grub2-common > /dev/null 2>&1 && update-grub
+	fi
+	# in case grub2-common was not installed
+
+	#########################################################################
+	# edit /etc/samba/smb.conf
+	#########################################################################
+	# edit the [homes] section only
+	# browseable = no -> yes
+	# read only = yes -> no
+	# create mask = 0700 -> 0755
+	# directory mask = 0700 -> 0755
+	# are the only changes to the section
+	sed -i -e '/homes/,/netlogon/ s/browseable = no/browseable = yes/' /etc/samba/smb.conf
+	sed -i -e '/homes/,/netlogon/ s/read only = yes/read only = no/' /etc/samba/smb.conf
+	sed -i -e '/homes/,/netlogon/ s/create mask = .*/create mask = 0755/' /etc/samba/smb.conf
+	sed -i -e '/homes/,/netlogon/ s/directory mask = .*/directory mask = 0775/' /etc/samba/smb.conf
+	# restart
+	systemctl restart smbd nmbd samba smb
+
+	# set the samba password to same as robert
+	echo " Enter the password for samba, same as for robert"
+	smbpasswd -L -a robert
+else
+	# this is for upgrading
+
+	# this code is run for upgrade
+	# /home/robert/config.tar.xz is archived because
+	# some of the config files contain tokens for a login.
+	# github detects these tokens and disables them.
+	# the archive hides these tokens.
+	# /home/robert/config.tar.xz must be extracted
+	# prompt for overwrite of config.tar.xz
+	cd /home/robert
+	read -p "Do you want to overwrite values in .config and .local with defaults? default no: (no/yes)" -t 10 ANSWER
+
+	test "${ANSWER}" = "yes" && sudo -u robert tar --overwrite --xz -xvf config.tar.xz
+fi
 
 # remove config.tar.xz
 rm -vf /home/robert/config.tar.xz
@@ -37,89 +136,6 @@ rm -vf /home/robert/config.tar.xz
 # rem build and xtract
 rm -vf /home/robert/build
 rm -vf /home/robert/xtract
-
-# update grub is not for a chroot environment
-# copy /tmp/grub to /etc/default/
-# first make a backup of /etc/default/grub
-# if one does not exist
-if test -f "/etc/default/grub.bak" && test ! -d "/chrootenvironment"; then
-	# /etc/default/grub.bak does exist
-	echo "configdata:postinst /etc/default/grub.bak does exist";
-	cp -v /tmp/grub /etc/default/
-else
-	# /etc/default/grub.bak does not exist
-	echo "configdata:postinst /etc/default/grub.bak does not exist";
-
-	if test -f "/etc/default/grub"; then
-		# /etc/default/grub does exist and /etc/default/grub.bak does not exist
-		echo "configdata:postinst /etc/default/grub does exist"
-		mv -fv /etc/default/grub /etc/default/grub.bak
-		cp -v /tmp/grub /etc/default/
-	else
-		# /etc/default/grub and /etc/default/grub.bak do not exist
-		echo "configdata:postinst /etc/default/grub does not exist"
-		# grub and grub.bak do not exist
-		# make both
-		cp -v /tmp/grub /etc/default/
-		cp -v /etc/default/grub /etc/default/grub.bak
-	fi
-fi
-
-# edit nanorc
-sed -i -e 's/^# set autoindent/set autoindent/' \
-	   -e 's/^# set linenumbers/set linenumbers/' \
-	   -e 's/^# set smooth/set smooth/' \
-	   -e 's/^# set multibuffer/set multibuffer/' \
-	   -e 's/^# set positionlog/set positionlog/' \
-	   -e 's/^# set selectedcolor lightwhite,magenta/set selectedcolor lightwhite,magenta/' \
-	   -e 's/^# set numbercolor cyan/set numbercolor cyan/' \
-	   -e 's/^# set keycolor cyan/set keycolor cyan/' /etc/nanorc
-
-
-# setup default console with Terminus
-cd /etc/default
-# make a backup if it does not exist
-
-test -f /etc/default/console-setup.bak || cp -v /etc/default/console-setup /etc/default/console-setup.bak
-
-# edit console-setup to set fonts
-#/usr/local/bin/stedit.pl -f /etc/default/console-setup -s /FONTFACE=.*/FONTFACE="Terminus"/ -s /FONTSIZE=.*/FONTSIZE="14x28"/ -o -w;
-/usr/bin/sed  -i -e 's/FONTFACE=.*/FONTFACE="Terminus"/' -e ' s/FONTSIZE=.*/FONTSIZE="14x28"/' /etc/default/console-setup
-
-# implement the new fontsize
-setupcon -f
-setupcon --save
-
-# update-grub must not be run in the live system or in the chroot environment
-# if init-linux is run on the live desktop then update-grub
-# must be prevented from running
-# this section of code only runs on a desktop , not the livesystem
-
-if test `hostname` != "live" && test ! -d "/chrootenvironment"; then
-	# check if grub2-common is installed
-	dpkg-query -s grub2-common > /dev/null 2>&1 && update-grub
-fi
-# in case grub2-common was not installed
-
-#########################################################################
-# edit /etc/samba/smb.conf
-#########################################################################
-# edit the [homes] section only
-# browseable = no -> yes
-# read only = yes -> no
-# create mask = 0700 -> 0755
-# directory mask = 0700 -> 0755
-# are the only changes to the section
-sed -i -e '/homes/,/netlogon/ s/browseable = no/browseable = yes/' /etc/samba/smb.conf
-sed -i -e '/homes/,/netlogon/ s/read only = yes/read only = no/' /etc/samba/smb.conf
-sed -i -e '/homes/,/netlogon/ s/create mask = .*/create mask = 0755/' /etc/samba/smb.conf
-sed -i -e '/homes/,/netlogon/ s/directory mask = .*/directory mask = 0775/' /etc/samba/smb.conf
-# restart
-systemctl restart smbd nmbd samba smb
-
-# set the samba password to same as robert
-echo " Enter the password for samba, same as for robert"
-smbpasswd -L -a robert
 
 exit 0
 
