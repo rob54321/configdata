@@ -125,7 +125,7 @@ else
 	# /home/robert/config.tar.xz must be extracted
 	# prompt for overwrite of config.tar.xz
 	cd /home/robert
-	read -p "Do you want to overwrite values in .config and .local with defaults? default no: (no/yes)" -t 10 ANSWER
+	read -p "Do you want to overwrite values in .config and .local with defaults? : answer(no/yes) default no: " -t 10 ANSWER
 
 	test "${ANSWER}" = "yes" && sudo -u robert tar --overwrite --xz -xvf config.tar.xz
 fi
