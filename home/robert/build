@@ -2,4 +2,4 @@
 # script to build config.tar.xz after an update
 # must be run in /home/robert/
 cd /home/robert
-tar --xz -C /home/robert -cvf config.tar.xz .bash_aliases .gitconfig .git-credentials .config/nemo .config/cinnamon .config/dconf .config/geany .config/gh .config/rclone .config/mate .config/ubuntu-mate .config/gtk-3.0 .config/libreoffice .local/share/cinnamon .local/share/nemo
+tar --xz -C /home/robert -cvf config.tar.xz .bash_aliases .gitconfig .git-credentials .config/nemo .config/cinnamon .config/dconf .config/geany .config/gh .config/rclone .config/mate .config/ubuntu-mate .config/gtk-3.0 .config/libreoffice .local/share/cinnamon .local/share/nemo .config/user-dirs.locale
