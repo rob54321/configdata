@@ -1,22 +1,22 @@
 Package: configdata
-Version: 1.6.4
+Version: 1.6.5
 Architecture: amd64
 Maintainer: Robert Key robertkey021@gmail.com
 Section: myown
-Depends: samba,\
-	 xz-utils,\
-	 nano,\
-	 geany,\
-	 geany-common,\
-	 geany-plugins,\
-	 rclone,\
-	 git,\
-	 git-man,\
-	 subversion,\
-	 gh,\
-	 mtools,\
-	 dosfstools,\
-	 ubuntu-mate-wallpapers-complete,\
+Depends: samba,
+	 xz-utils,
+	 nano,
+	 geany,
+	 geany-common,
+	 geany-plugins,
+	 rclone,
+	 git,
+	 git-man,
+	 subversion,
+	 gh,
+	 mtools,
+	 dosfstools,
+	 ubuntu-mate-wallpapers-complete,
 	 lomiri-wallpapers
 Priority: optional
 Description: All config data and geany, rclone, git, subversion, ubuntu-mate-wallpapers-complete

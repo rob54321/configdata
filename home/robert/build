@@ -2,4 +2,9 @@
 # script to build config.tar.xz after an update
 # must be run in /home/robert/
 cd /home/robert
-tar --xz -C /home/robert --exclude=.config/mozilla -cvf config.tar.xz .bash_aliases .gitconfig .git-credentials .config  .local
+tar --xz -C /home/robert --exclude=.config/mozilla -cvf config.tar.xz \
+	.bash_aliases\
+	.gitconfig\
+	.git-credentials\
+	.config\
+	 .local
